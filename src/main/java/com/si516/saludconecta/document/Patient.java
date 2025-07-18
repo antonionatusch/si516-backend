@@ -20,4 +20,6 @@ public class Patient {
     private String id;
     private String name;
     private LocalDate dob;
+    private String email;
+    private String phone;
 }
