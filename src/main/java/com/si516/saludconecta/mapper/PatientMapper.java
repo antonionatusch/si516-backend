@@ -1,6 +1,6 @@
 package com.si516.saludconecta.mapper;
 
-import com.si516.saludconecta.document.Office;
+// Line removed as it is unused.
 import com.si516.saludconecta.document.Patient;
 import com.si516.saludconecta.dto.OfficeDTO;
 import com.si516.saludconecta.dto.PatientDTO;
