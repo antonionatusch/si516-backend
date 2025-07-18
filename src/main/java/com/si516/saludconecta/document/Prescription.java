@@ -1,5 +1,6 @@
 package com.si516.saludconecta.document;
 
+import com.si516.saludconecta.enums.PickupType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
