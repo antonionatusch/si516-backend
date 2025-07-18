@@ -2,7 +2,7 @@ package com.si516.saludconecta.mapper;
 
 // Line removed as it is unused.
 import com.si516.saludconecta.document.Patient;
-import com.si516.saludconecta.dto.OfficeDTO;
+// Line removed as it is unused.
 import com.si516.saludconecta.dto.PatientDTO;
 
 public class PatientMapper {
