@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Document("doctors")
 public class Doctor {
     @Id
