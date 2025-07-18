@@ -1,4 +1,6 @@
 package com.si516.saludconecta.document;
 
-public class PickupType {
+public enum PickupType {
+    NOW,
+    SCHEDULED,
 }
