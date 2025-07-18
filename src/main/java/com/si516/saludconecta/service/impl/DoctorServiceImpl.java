@@ -54,7 +54,6 @@ public class DoctorServiceImpl implements DoctorService {
         Office office = officeRepository.findById(doctorDTO.officeId())
                 .orElseThrow(() -> new RuntimeException("Office not found: " + doctorDTO.officeId()));
 
-        existing.setId(doctorDTO.id());
         existing.setUsername(doctorDTO.username());
         existing.setFullName(doctorDTO.fullName());
         existing.setOffice(office);
