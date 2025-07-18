@@ -14,7 +14,7 @@ public class Doctor {
     private String username;
     private String passwordHash;
     private String fullName;
-    private String officeId;    // referencia manual a Office.id
+    private Office office;    // referencia manual a Office.id
     // getters/setters, constructores
 }
 
