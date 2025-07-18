@@ -19,7 +19,9 @@ public class DoctorMapper {
                 doctor.getId(),
                 doctor.getUsername(),
                 doctor.getFullName(),
+
                 doctor.getOffice().getId()
+
         );
     }
 }
