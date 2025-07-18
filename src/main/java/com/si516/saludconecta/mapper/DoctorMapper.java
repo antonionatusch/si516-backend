@@ -19,7 +19,7 @@ public class DoctorMapper {
                 doctor.getId(),
                 doctor.getUsername(),
                 doctor.getFullName(),
-                doctor.getOfficeId() != null ? doctor.getOfficeId() : null
+                doctor.getOfficeId()
         );
     }
 }
