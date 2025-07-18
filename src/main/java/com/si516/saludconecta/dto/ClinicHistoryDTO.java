@@ -15,8 +15,8 @@ public record ClinicHistoryDTO (
         @NotNull(message = "Patient ID must not be null when creating") String patientId,
         @NotBlank(message = "Visit reason is required") String visitReason,
         @NotBlank(message = "Diagnosis is required") String diagnosis,
-        @NotBlank(message = "Symptoms is required") List<String> symptoms,
-        @NotBlank(message = "Treatment is required") List<Treatment> treatment,
+        @NotNull(message = "Symptoms must not be null") @Size(min=1, message = "Symptoms must contain at least one item") List<String> symptoms,
+        @NotNull(message = "Treatment must not be null") @Size(min=1, message = "Treatment must contain at least one item") List<Treatment> treatment,
         @NotBlank(message = "Prescription is required") Prescription prescription
 
 ) {
