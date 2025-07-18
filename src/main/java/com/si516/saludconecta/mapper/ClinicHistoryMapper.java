@@ -2,7 +2,6 @@ package com.si516.saludconecta.mapper;
 
 import com.si516.saludconecta.document.ClinicHistory;
 import com.si516.saludconecta.dto.ClinicHistoryDTO;
-import com.si516.saludconecta.dto.DoctorDTO;
 
 public class ClinicHistoryMapper {
     public static ClinicHistory toEntity(ClinicHistoryDTO dto) {
