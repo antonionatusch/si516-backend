@@ -1,7 +1,6 @@
 package com.si516.saludconecta.mapper;
 
 import com.si516.saludconecta.document.Doctor;
-import com.si516.saludconecta.document.Office;
 import com.si516.saludconecta.dto.DoctorDTO;
 
 public class DoctorMapper {
