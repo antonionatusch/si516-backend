@@ -17,7 +17,7 @@ public record ClinicHistoryDTO (
         @NotBlank(message = "Diagnosis is required") String diagnosis,
         @NotNull(message = "Symptoms must not be null") @Size(min=1, message = "Symptoms must contain at least one item") List<String> symptoms,
         @NotNull(message = "Treatment must not be null") @Size(min=1, message = "Treatment must contain at least one item") List<Treatment> treatment,
-        @NotBlank(message = "Prescription is required") Prescription prescription
+        @NotNull(message = "Prescription is required") Prescription prescription
 
 ) {
 }
