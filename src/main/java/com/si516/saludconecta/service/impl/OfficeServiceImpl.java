@@ -44,7 +44,7 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     public OfficeDTO update(String id, OfficeDTO officeDTO) {
         Office existing = officeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Office not found:" + id));
+                .orElseThrow(() -> new RuntimeException("Office not found: " + id));
 
         existing.setCode(officeDTO.code());
         existing.setFloor(officeDTO.floor());
