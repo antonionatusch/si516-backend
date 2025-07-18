@@ -10,7 +10,6 @@ import com.si516.saludconecta.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.util.List;
 import java.util.stream.Collectors;
 
