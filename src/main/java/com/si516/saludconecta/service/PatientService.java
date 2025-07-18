@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface PatientService {
     List<PatientDTO> getAll();
+
     PatientDTO getById(String id);
+
     PatientDTO create(PatientDTO patient);
+
     PatientDTO update(String id, PatientDTO patient);
+
     void delete(String id);
 }
