@@ -1,7 +1,6 @@
 package com.si516.saludconecta.mapper;
 
 import com.si516.saludconecta.document.ClinicHistory;
-import com.si516.saludconecta.document.Doctor;
 import com.si516.saludconecta.dto.ClinicHistoryDTO;
 import com.si516.saludconecta.dto.DoctorDTO;
 
