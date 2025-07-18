@@ -5,6 +5,7 @@ import com.si516.saludconecta.document.Treatment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
