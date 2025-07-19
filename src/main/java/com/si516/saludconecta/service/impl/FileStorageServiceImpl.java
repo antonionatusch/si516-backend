@@ -72,16 +72,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public Optional<FileMetadataDTO> getMetadata(String fileId) {
         GridFSFile f = gridFsTemplate.findOne(query(where("_id").is(fileId)));
-        Map<String, Object> meta = f.getMetadata() != null ? f.getMetadata() : Collections.emptyMap();
-        String contentType = meta.getOrDefault("contentType", "application/octet-stream").toString();
-        return Optional.of(new FileMetadataDTO(
-                f.getObjectId().toHexString(),
-                f.getFilename(),
-                contentType,
-                f.getLength(),
-                f.getUploadDate().toInstant(),
-                meta
-        ));
+        return Optional.of(extractMetadata(f));
     }
 
     @Override
@@ -92,18 +83,20 @@ public class FileStorageServiceImpl implements FileStorageService {
                         .with(Sort.by(Sort.Direction.DESC, "uploadDate"))
         );
         return StreamSupport.stream(iterable.spliterator(), false)
-                .map(f -> {
-                    Map<String, Object> meta = f.getMetadata() != null ? f.getMetadata() : Collections.emptyMap();
-                    String contentType = meta.getOrDefault("contentType", "application/octet-stream").toString();
-                    return new FileMetadataDTO(
-                            f.getObjectId().toHexString(),
-                            f.getFilename(),
-                            contentType,
-                            f.getLength(),
-                            f.getUploadDate().toInstant(),
-                            meta
-                    );
-                })
+                .map(this::extractMetadata)
                 .toList();
+    }
+
+    private FileMetadataDTO extractMetadata(GridFSFile f) {
+        Map<String, Object> meta = f.getMetadata() != null ? f.getMetadata() : Collections.emptyMap();
+        String contentType = meta.getOrDefault("contentType", "application/octet-stream").toString();
+        return new FileMetadataDTO(
+                f.getObjectId().toHexString(),
+                f.getFilename(),
+                contentType,
+                f.getLength(),
+                f.getUploadDate().toInstant(),
+                meta
+        );
     }
 }
