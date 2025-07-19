@@ -49,8 +49,7 @@ public class DoctorController {
     // DELETE /doctors/{id} - Delete a doctor
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        // Verificar que el doctor existe antes de eliminar
-        doctorService.getById(id); // Lanza excepción si no existe
+        // Eliminar el doctor directamente
         doctorService.delete(id);
         return ResponseEntity.noContent().build();
     }
