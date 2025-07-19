@@ -11,7 +11,7 @@ public record PatientDTO(
         @NotBlank(message = "Email is required")
         @Email(message = "Email must be valid") String email,
         @NotBlank(message = "Phone is required")
-        @Pattern(regexp = "^\\d{7}$", message = "Phone must be exactly 7 digits")
+        @Pattern(regexp = "^\\d{8}$", message = "Phone must be exactly 8 digits")
         String phone
 ) {
 }
