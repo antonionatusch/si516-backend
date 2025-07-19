@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mongodb.client.gridfs.model.GridFSFile;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.*;
 import java.util.stream.StreamSupport;
 
@@ -47,12 +46,14 @@ public class FileStorageServiceImpl implements FileStorageService {
                 meta
         );
 
+        GridFSFile storedFile = gridFsTemplate.findOne(query(where("_id").is(objectId.toHexString())));
+
         return new FileMetadataDTO(
                 objectId.toHexString(),
                 file.getOriginalFilename(),
                 file.getContentType(),
                 file.getSize(),
-                Instant.now(),
+                storedFile.getUploadDate().toInstant(),
                 meta
         );
     }
@@ -71,7 +72,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public Optional<FileMetadataDTO> getMetadata(String fileId) {
         GridFSFile f = gridFsTemplate.findOne(query(where("_id").is(fileId)));
-        Map<String,Object> meta = f.getMetadata() != null ? f.getMetadata() : Collections.emptyMap();
+        Map<String, Object> meta = f.getMetadata() != null ? f.getMetadata() : Collections.emptyMap();
         String contentType = meta.getOrDefault("contentType", "application/octet-stream").toString();
         return Optional.of(new FileMetadataDTO(
                 f.getObjectId().toHexString(),
@@ -92,7 +93,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         );
         return StreamSupport.stream(iterable.spliterator(), false)
                 .map(f -> {
-                    Map<String,Object> meta = f.getMetadata() != null ? f.getMetadata() : Collections.emptyMap();
+                    Map<String, Object> meta = f.getMetadata() != null ? f.getMetadata() : Collections.emptyMap();
                     String contentType = meta.getOrDefault("contentType", "application/octet-stream").toString();
                     return new FileMetadataDTO(
                             f.getObjectId().toHexString(),
