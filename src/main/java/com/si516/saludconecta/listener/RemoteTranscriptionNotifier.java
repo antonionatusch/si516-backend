@@ -1,6 +1,7 @@
 package com.si516.saludconecta.listener;
 
 import com.si516.saludconecta.event.NewAudioStoredEvent;
+import com.si516.saludconecta.service.impl.TranscriptionPollingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import java.time.Duration;
 public class RemoteTranscriptionNotifier {
 
     private final WebClient transcriberWebClient;
+    private final TranscriptionPollingService pollingService;
 
     @Value("${app.transcriber.remote.enabled:true}")
     private boolean enabled;
@@ -48,5 +50,11 @@ public class RemoteTranscriptionNotifier {
                 .doOnError(ex -> log.error("Error notificando transcriber (fileId={}): {}", event.getFileId(), ex.getMessage()))
                 .onErrorResume(ex -> Mono.empty())
                 .subscribe(resp -> log.info("Respuesta transcriber fileId={}: {}", event.getFileId(), resp));
+    }
+
+    @EventListener
+    public void handleNewAudioStored(NewAudioStoredEvent event) {
+        log.info("Audio almacenado: {}. Iniciando proceso automático de transcripción y creación de historia clínica.", event.getFileId());
+        pollingService.pollTranscriptionStatus(event.getFileId());
     }
 }
