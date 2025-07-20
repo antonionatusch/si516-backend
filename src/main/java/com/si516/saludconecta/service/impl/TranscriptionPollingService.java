@@ -4,6 +4,7 @@ import com.si516.saludconecta.event.TranscriptionCompletedEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,16 @@ import java.util.concurrent.CompletableFuture;
 public class TranscriptionPollingService {
 
     private final ApplicationEventPublisher eventPublisher;
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RestTemplate restTemplate;
+
+    @Value("${app.transcriber.remote.url}")
+    private String transcriberRemoteBaseUrl;
 
     @Async
     public CompletableFuture<Void> pollTranscriptionStatus(String audioId) {
         log.info("Iniciando polling para audio: {}", audioId);
 
-        String statusUrl = "http://25.51.135.130:8001/transcribe/status/" + audioId;
+        String statusUrl = transcriberRemoteBaseUrl + "/transcribe/status/" + audioId;
 
         try {
             // Polling cada 10 segundos por máximo 5 minutos
