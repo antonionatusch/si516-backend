@@ -1,9 +1,11 @@
 package com.si516.saludconecta.service.impl;
 
 import com.si516.saludconecta.dto.file.FileMetadataDTO;
+import com.si516.saludconecta.event.NewAudioStoredEvent;
 import com.si516.saludconecta.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
@@ -12,6 +14,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.*;
@@ -22,20 +25,20 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FileStorageServiceImpl implements FileStorageService {
 
     private final GridFsTemplate gridFsTemplate;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public FileMetadataDTO storeAudio(MultipartFile file,
                                       String doctorId,
-                                      String patientId,
-                                      String appointmentId) throws IOException {
+                                      String patientId) throws IOException {
 
         Document meta = new Document();
         meta.put("doctorId", doctorId);
         meta.put("patientId", patientId);
-        meta.put("appointmentId", appointmentId);
         meta.put("originalFilename", file.getOriginalFilename());
         meta.put("contentType", file.getContentType());
 
@@ -48,7 +51,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
         GridFSFile storedFile = gridFsTemplate.findOne(query(where("_id").is(objectId.toHexString())));
 
-        return new FileMetadataDTO(
+        FileMetadataDTO dto = new FileMetadataDTO(
                 objectId.toHexString(),
                 file.getOriginalFilename(),
                 file.getContentType(),
@@ -56,7 +59,12 @@ public class FileStorageServiceImpl implements FileStorageService {
                 storedFile.getUploadDate().toInstant(),
                 meta
         );
+
+        eventPublisher.publishEvent(new NewAudioStoredEvent(this, dto.id(), dto.filename()));
+
+        return dto;
     }
+
 
     @Override
     public Optional<Resource> loadAsResource(String fileId) {

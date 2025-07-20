@@ -26,11 +26,10 @@ public class FileController {
     public ResponseEntity<FileUploadResponseDTO> uploadAudio(
             @RequestPart("file") MultipartFile file,
             @RequestParam(required = false) String doctorId,
-            @RequestParam(required = false) String patientId,
-            @RequestParam(required = false) String appointmentId
+            @RequestParam(required = false) String patientId
     ) throws IOException {
 
-        var meta = fileStorageService.storeAudio(file, doctorId, patientId, appointmentId);
+        var meta = fileStorageService.storeAudio(file, doctorId, patientId);
         return ResponseEntity.ok(new FileUploadResponseDTO(
                 meta.id(),
                 meta.filename(),
