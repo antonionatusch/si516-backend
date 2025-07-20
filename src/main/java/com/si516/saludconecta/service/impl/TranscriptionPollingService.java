@@ -54,12 +54,14 @@ public class TranscriptionPollingService {
                     }
                     // Si está en RUNNING, continúa el polling
 
-                    CompletableFuture.runAsync(() -> {}, CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)).join();
+                    CompletableFuture.runAsync(() -> {
+                    }, CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)).join();
                     attempt++;
 
                 } catch (Exception e) {
                     log.warn("Error en intento {} para audio {}: {}", attempt + 1, audioId, e.getMessage());
-                    CompletableFuture.runAsync(() -> {}, CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)).join();
+                    CompletableFuture.runAsync(() -> {
+                    }, CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)).join();
                     attempt++;
                 }
             }
