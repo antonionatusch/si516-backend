@@ -14,7 +14,7 @@ public class ClinicHistoryMapper {
                 dto.diagnosis(),
                 dto.symptoms(),
                 dto.treatment(),
-                dto.prescription(),
+                dto.pickup(),
                 null // createdAt will be set by the service layer
         );
     }
@@ -29,7 +29,7 @@ public class ClinicHistoryMapper {
                 clinicHistory.getDiagnosis(),
                 clinicHistory.getSymptoms(),
                 clinicHistory.getTreatment(),
-                clinicHistory.getPrescription()
+                clinicHistory.getPickup()
         );
     }
 }

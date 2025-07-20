@@ -23,7 +23,7 @@ public class ClinicHistory {
     private String diagnosis;
     private List<String> symptoms;
     private List<Treatment> treatment;      // clase embebida
-    private Prescription prescription;      // clase embebida
+    private Pickup pickup;      // clase embebida
     private Instant createdAt;
     // getters/setters, constructores
 }

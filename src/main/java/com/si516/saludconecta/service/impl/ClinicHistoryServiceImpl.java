@@ -1,7 +1,7 @@
 package com.si516.saludconecta.service.impl;
 
 import com.si516.saludconecta.document.ClinicHistory;
-import com.si516.saludconecta.document.Prescription;
+import com.si516.saludconecta.document.Pickup;
 import com.si516.saludconecta.document.Treatment;
 import com.si516.saludconecta.dto.ClinicHistoryDTO;
 import com.si516.saludconecta.event.TranscriptionCompletedEvent;
@@ -90,14 +90,14 @@ public class ClinicHistoryServiceImpl implements ClinicHistoryService {
             clinicHistory.setTreatment(List.of());
         }
 
-        // Mapear prescription con validación
-        Map<String, Object> prescriptionMap = (Map<String, Object>) extractedData.get("prescription");
-        if (prescriptionMap != null) {
-            Prescription prescription = objectMapper.convertValue(prescriptionMap, Prescription.class);
-            clinicHistory.setPrescription(prescription);
+        // Mapear recogida con validación
+        Map<String, Object> pickupMap = (Map<String, Object>) extractedData.get("pickup");
+        if (pickupMap != null) {
+            Pickup pickup = objectMapper.convertValue(pickupMap, Pickup.class);
+            clinicHistory.setPickup(pickup);
         } else {
-            // Crear prescription por defecto usando el enum correcto
-            clinicHistory.setPrescription(new Prescription(com.si516.saludconecta.enums.PickupType.LATER, null));
+            // Crear recogida por defecto usando el enum correcto
+            clinicHistory.setPickup(new Pickup(com.si516.saludconecta.enums.PickupType.LATER, null));
         }
 
         // Usar los IDs reales desde los metadatos del archivo
