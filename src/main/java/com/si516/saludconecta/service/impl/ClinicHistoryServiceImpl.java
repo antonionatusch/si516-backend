@@ -12,6 +12,7 @@ import com.si516.saludconecta.service.FileStorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +31,10 @@ public class ClinicHistoryServiceImpl implements ClinicHistoryService {
     private final FileStorageService fileStorageService;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
+
+
+    @Value("${app.transcriber.remote.url}")
+    private String transcriberRemoteBaseUrl;
 
     @EventListener
     public void handleTranscriptionCompleted(TranscriptionCompletedEvent event) {
@@ -54,7 +59,7 @@ public class ClinicHistoryServiceImpl implements ClinicHistoryService {
         String patientId = (String) metadata.get("patientId");
 
         // Llamar al microservicio de transcripción
-        String transcriptionUrl = "http://25.51.135.130:8001/transcribe/result/" + audioId;
+        String transcriptionUrl = transcriberRemoteBaseUrl + "/transcribe/result/" + audioId;
         Map<String, Object> transcriptionJson = restTemplate.getForObject(transcriptionUrl, Map.class);
 
         // Obtener el objeto 'extracted' que contiene los datos estructurados
