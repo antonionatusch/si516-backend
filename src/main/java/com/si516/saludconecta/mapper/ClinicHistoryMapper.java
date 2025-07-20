@@ -29,7 +29,8 @@ public class ClinicHistoryMapper {
                 clinicHistory.getDiagnosis(),
                 clinicHistory.getSymptoms(),
                 clinicHistory.getTreatment(),
-                clinicHistory.getPickup()
+                clinicHistory.getPickup(),
+                clinicHistory.getCreatedAt()
         );
     }
 }

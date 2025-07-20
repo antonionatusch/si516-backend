@@ -25,9 +25,6 @@ public class ClinicHistory {
     private List<String> symptoms;
     private List<Treatment> treatment;      // clase embebida
     private Pickup pickup;      // clase embebida
-    @JsonFormat(shape = JsonFormat.Shape.STRING,
-            pattern = "dd-MM-yyyy HH:mm:ss",
-            timezone = "America/La_Paz")
     private Instant createdAt;
     // getters/setters, constructores
 }
