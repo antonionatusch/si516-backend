@@ -32,13 +32,11 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public FileMetadataDTO storeAudio(MultipartFile file,
                                       String doctorId,
-                                      String patientId,
-                                      String appointmentId) throws IOException {
+                                      String patientId) throws IOException {
 
         Document meta = new Document();
         meta.put("doctorId", doctorId);
         meta.put("patientId", patientId);
-        meta.put("appointmentId", appointmentId);
         meta.put("originalFilename", file.getOriginalFilename());
         meta.put("contentType", file.getContentType());
 

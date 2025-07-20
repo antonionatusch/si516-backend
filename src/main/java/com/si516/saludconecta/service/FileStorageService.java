@@ -11,8 +11,7 @@ import java.util.Optional;
 public interface FileStorageService {
     FileMetadataDTO storeAudio(MultipartFile file,
                                String doctorId,
-                               String patientId,
-                               String appointmentId) throws IOException;
+                               String patientId) throws IOException;
 
     Optional<Resource> loadAsResource(String fileId);
 
