@@ -6,6 +6,7 @@ import com.si516.saludconecta.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
@@ -14,6 +15,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.*;
@@ -24,10 +26,12 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FileStorageServiceImpl implements FileStorageService {
 
     private final GridFsTemplate gridFsTemplate;
     private final ApplicationEventPublisher eventPublisher;
+    private final TranscriptionPollingService pollingService;
 
     @Override
     public FileMetadataDTO storeAudio(MultipartFile file,
@@ -61,6 +65,12 @@ public class FileStorageServiceImpl implements FileStorageService {
         eventPublisher.publishEvent(new NewAudioStoredEvent(this, dto.id(), dto.filename()));
 
         return dto;
+    }
+
+    @EventListener
+    public void handleNewAudioStored(NewAudioStoredEvent event) {
+        log.info("Audio almacenado: {}. Iniciando proceso automático de transcripción y creación de historia clínica.", event.getFileId());
+        pollingService.pollTranscriptionStatus(event.getFileId());
     }
 
     @Override

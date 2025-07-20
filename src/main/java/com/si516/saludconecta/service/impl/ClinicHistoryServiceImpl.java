@@ -4,12 +4,16 @@ import com.si516.saludconecta.document.ClinicHistory;
 import com.si516.saludconecta.document.Prescription;
 import com.si516.saludconecta.document.Treatment;
 import com.si516.saludconecta.dto.ClinicHistoryDTO;
+import com.si516.saludconecta.event.TranscriptionCompletedEvent;
 import com.si516.saludconecta.mapper.ClinicHistoryMapper;
 import com.si516.saludconecta.repository.ClinicHistoryRepository;
 import com.si516.saludconecta.service.ClinicHistoryService;
+import com.si516.saludconecta.service.FileStorageService;
 import com.si516.saludconecta.enums.PickupType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,14 +24,36 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ClinicHistoryServiceImpl implements ClinicHistoryService {
 
     private final ClinicHistoryRepository clinicHistoryRepository;
+    private final FileStorageService fileStorageService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate = new RestTemplate();
 
+    @EventListener
+    public void handleTranscriptionCompleted(TranscriptionCompletedEvent event) {
+        log.info("Transcripción completada para audio: {}. Creando historia clínica automáticamente...", event.getAudioId());
+        try {
+            createFromTranscription(event.getAudioId());
+            log.info("Historia clínica creada exitosamente para audio: {}", event.getAudioId());
+        } catch (Exception e) {
+            log.error("Error al crear historia clínica para audio {}: {}", event.getAudioId(), e.getMessage(), e);
+        }
+    }
+
     @Override
     public ClinicHistoryDTO createFromTranscription(String audioId) {
+        // Obtener metadatos del archivo
+        var fileMetadata = fileStorageService.getMetadata(audioId)
+                .orElseThrow(() -> new RuntimeException("No se encontró el archivo de audio: " + audioId));
+
+        // Extraer IDs desde metadata
+        Map<String, Object> metadata = fileMetadata.metadata();
+        String doctorId = (String) metadata.get("doctorId");
+        String patientId = (String) metadata.get("patientId");
+
         // Llamar al microservicio de transcripción
         String transcriptionUrl = "http://25.51.135.130:8001/transcribe/result/" + audioId;
         Map<String, Object> transcriptionJson = restTemplate.getForObject(transcriptionUrl, Map.class);
@@ -74,24 +100,14 @@ public class ClinicHistoryServiceImpl implements ClinicHistoryService {
             clinicHistory.setPrescription(new Prescription(com.si516.saludconecta.enums.PickupType.LATER, null));
         }
 
-        // Buscar patientId por nombre
-        String patientName = (String) extractedData.get("patientName");
-        String patientId = findPatientIdByName(patientName);
+        // Usar los IDs reales desde los metadatos del archivo
+        clinicHistory.setDoctorId(doctorId);
         clinicHistory.setPatientId(patientId);
-
-        // Por ahora usar valores fijos para doctorId y officeId ya que no vienen en el JSON
-        clinicHistory.setDoctorId("default-doctor");
-        clinicHistory.setOfficeId("default-office");
 
         clinicHistory.setCreatedAt(Instant.now());
 
         var saved = clinicHistoryRepository.save(clinicHistory);
         return ClinicHistoryMapper.toDTO(saved);
-    }
-
-    private String findPatientIdByName(String patientName) {
-        // Por ahora retorna null, después implementar búsqueda
-        return null;
     }
 
     @Override
