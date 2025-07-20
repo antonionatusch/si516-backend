@@ -14,7 +14,6 @@ import java.util.List;
 public record ClinicHistoryDTO(
         @Null(message = "Id must be null when creating") String id,
         @NotNull(message = "Doctor ID must not be null when creating") String doctorId,
-        @NotNull(message = "Office ID must not be null when creating") String officeId,
         @NotNull(message = "Patient ID must not be null when creating") String patientId,
         @NotBlank(message = "Visit reason is required") String visitReason,
         @NotBlank(message = "Diagnosis is required") String diagnosis,

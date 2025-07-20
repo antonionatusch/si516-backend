@@ -18,7 +18,6 @@ public class ClinicHistory {
     @Id
     private String id;
     private String doctorId;
-    private String officeId;
     private String patientId;
     private String visitReason;
     private String diagnosis;

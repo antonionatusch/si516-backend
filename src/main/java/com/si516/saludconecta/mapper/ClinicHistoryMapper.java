@@ -8,7 +8,6 @@ public class ClinicHistoryMapper {
         return new ClinicHistory(
                 dto.id(),
                 dto.doctorId(),
-                dto.officeId(),
                 dto.patientId(),
                 dto.visitReason(),
                 dto.diagnosis(),
@@ -23,7 +22,6 @@ public class ClinicHistoryMapper {
         return new ClinicHistoryDTO(
                 clinicHistory.getId(),
                 clinicHistory.getDoctorId(),
-                clinicHistory.getOfficeId(),
                 clinicHistory.getPatientId(),
                 clinicHistory.getVisitReason(),
                 clinicHistory.getDiagnosis(),
