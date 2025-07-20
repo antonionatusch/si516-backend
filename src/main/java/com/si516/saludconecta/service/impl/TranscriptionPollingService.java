@@ -1,7 +1,6 @@
 package com.si516.saludconecta.service.impl;
 
 import com.si516.saludconecta.event.TranscriptionCompletedEvent;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class TranscriptionPollingService {
     private String transcriberRemoteBaseUrl;
 
     @Async
-    public CompletableFuture<Void> pollTranscriptionStatus(String audioId) {
+    public void pollTranscriptionStatus(String audioId) {
         log.info("Iniciando polling para audio: {}", audioId);
 
         String statusUrl = transcriberRemoteBaseUrl + "/transcribe/status/" + audioId;
@@ -39,29 +39,27 @@ public class TranscriptionPollingService {
                 try {
                     Map<String, Object> statusResponse = restTemplate.getForObject(statusUrl, Map.class);
 
-                    if (statusResponse != null) {
-                        String state = (String) statusResponse.get("state");
+                    String state = (String) statusResponse.get("state");
 
-                        log.info("Estado de transcripción para {}: {}", audioId, state);
+                    log.info("Estado de transcripción para {}: {}", audioId, state);
 
-                        if ("DONE".equals(state)) {
-                            log.info("Transcripción completada para {}. Publicando evento...", audioId);
-                            eventPublisher.publishEvent(new TranscriptionCompletedEvent(this, audioId));
-                            break;
-                        } else if ("ERROR".equals(state)) {
-                            String error = (String) statusResponse.get("error");
-                            log.error("Error en transcripción para {}: {}", audioId, error);
-                            break;
-                        }
-                        // Si está en RUNNING, continúa el polling
+                    if ("DONE".equals(state)) {
+                        log.info("Transcripción completada para {}. Publicando evento...", audioId);
+                        eventPublisher.publishEvent(new TranscriptionCompletedEvent(this, audioId));
+                        break;
+                    } else if ("ERROR".equals(state)) {
+                        String error = (String) statusResponse.get("error");
+                        log.error("Error en transcripción para {}: {}", audioId, error);
+                        break;
                     }
+                    // Si está en RUNNING, continúa el polling
 
-                    Thread.sleep(10000); // Esperar 10 segundos
+                    CompletableFuture.runAsync(() -> {}, CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)).join();
                     attempt++;
 
                 } catch (Exception e) {
                     log.warn("Error en intento {} para audio {}: {}", attempt + 1, audioId, e.getMessage());
-                    Thread.sleep(10000);
+                    CompletableFuture.runAsync(() -> {}, CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS)).join();
                     attempt++;
                 }
             }
@@ -74,6 +72,6 @@ public class TranscriptionPollingService {
             log.error("Error crítico en polling para audio {}: {}", audioId, e.getMessage(), e);
         }
 
-        return CompletableFuture.completedFuture(null);
+        CompletableFuture.completedFuture(null);
     }
 }
