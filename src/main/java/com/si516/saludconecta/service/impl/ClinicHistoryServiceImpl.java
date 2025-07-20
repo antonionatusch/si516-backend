@@ -9,7 +9,6 @@ import com.si516.saludconecta.mapper.ClinicHistoryMapper;
 import com.si516.saludconecta.repository.ClinicHistoryRepository;
 import com.si516.saludconecta.service.ClinicHistoryService;
 import com.si516.saludconecta.service.FileStorageService;
-import com.si516.saludconecta.enums.PickupType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +28,8 @@ public class ClinicHistoryServiceImpl implements ClinicHistoryService {
 
     private final ClinicHistoryRepository clinicHistoryRepository;
     private final FileStorageService fileStorageService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
 
     @EventListener
     public void handleTranscriptionCompleted(TranscriptionCompletedEvent event) {
@@ -57,10 +56,6 @@ public class ClinicHistoryServiceImpl implements ClinicHistoryService {
         // Llamar al microservicio de transcripción
         String transcriptionUrl = "http://25.51.135.130:8001/transcribe/result/" + audioId;
         Map<String, Object> transcriptionJson = restTemplate.getForObject(transcriptionUrl, Map.class);
-
-        if (transcriptionJson == null) {
-            throw new RuntimeException("No se pudo obtener la transcripción del audio: " + audioId);
-        }
 
         // Obtener el objeto 'extracted' que contiene los datos estructurados
         Map<String, Object> extractedData = (Map<String, Object>) transcriptionJson.get("extracted");
