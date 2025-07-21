@@ -3,6 +3,7 @@ package com.si516.saludconecta.document;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,13 +18,12 @@ public class ClinicHistory {
     @Id
     private String id;
     private String doctorId;
-    private String officeId;
     private String patientId;
     private String visitReason;
     private String diagnosis;
     private List<String> symptoms;
     private List<Treatment> treatment;      // clase embebida
-    private Prescription prescription;      // clase embebida
+    private Pickup pickup;      // clase embebida
     private Instant createdAt;
     // getters/setters, constructores
 }

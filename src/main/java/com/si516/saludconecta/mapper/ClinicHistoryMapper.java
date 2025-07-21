@@ -8,13 +8,12 @@ public class ClinicHistoryMapper {
         return new ClinicHistory(
                 dto.id(),
                 dto.doctorId(),
-                dto.officeId(),
                 dto.patientId(),
                 dto.visitReason(),
                 dto.diagnosis(),
                 dto.symptoms(),
                 dto.treatment(),
-                dto.prescription(),
+                dto.pickup(),
                 null // createdAt will be set by the service layer
         );
     }
@@ -23,13 +22,13 @@ public class ClinicHistoryMapper {
         return new ClinicHistoryDTO(
                 clinicHistory.getId(),
                 clinicHistory.getDoctorId(),
-                clinicHistory.getOfficeId(),
                 clinicHistory.getPatientId(),
                 clinicHistory.getVisitReason(),
                 clinicHistory.getDiagnosis(),
                 clinicHistory.getSymptoms(),
                 clinicHistory.getTreatment(),
-                clinicHistory.getPrescription()
+                clinicHistory.getPickup(),
+                clinicHistory.getCreatedAt()
         );
     }
 }
