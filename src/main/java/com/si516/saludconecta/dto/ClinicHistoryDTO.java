@@ -23,7 +23,7 @@ public record ClinicHistoryDTO(
         @JsonFormat(shape = JsonFormat.Shape.STRING,
                 pattern = "dd-MM-yyyy HH:mm:ss",
                 timezone = "America/La_Paz")
-        @NotNull(message = "createdAt is required") Instant createdAt
+        @Null(message = "createdAt must be null when creating") Instant createdAt
 
 ) {
 }
