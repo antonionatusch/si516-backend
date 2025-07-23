@@ -25,7 +25,8 @@ public class AuthController {
             AuthResponseDTO response = authService.login(loginRequest);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            ErrorResponse errorResponse = new ErrorResponse("Login failed: " + e.getMessage(), "400");
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 
