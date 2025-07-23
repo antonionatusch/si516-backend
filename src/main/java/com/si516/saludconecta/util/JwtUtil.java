@@ -63,8 +63,8 @@ public class JwtUtil {
             log.error("JWT token is malformed: {}", e.getMessage());
             throw new RuntimeException("JWT token is malformed");
         } catch (IllegalArgumentException e) {
-            log.error("JWT token compact of handler are invalid: {}", e.getMessage());
-            throw new RuntimeException("JWT token compact of handler are invalid");
+            log.error("JWT token compact or handler is invalid: {}", e.getMessage());
+            throw new RuntimeException("JWT token compact or handler is invalid");
         }
     }
 
