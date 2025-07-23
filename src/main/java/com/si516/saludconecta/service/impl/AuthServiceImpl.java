@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
     private final DoctorRepository doctorRepository;
     private final OfficeRepository officeRepository;
     private final JwtUtil jwtUtil;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public AuthResponseDTO login(LoginRequestDTO loginRequest) {

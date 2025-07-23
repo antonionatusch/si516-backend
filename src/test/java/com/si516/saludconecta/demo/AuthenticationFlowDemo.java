@@ -31,11 +31,12 @@ public class AuthenticationFlowDemo {
         
         // Setup JWT utility
         JwtUtil jwtUtil = new JwtUtil();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         ReflectionTestUtils.setField(jwtUtil, "jwtSecret", "myTestSecretKey123456789012345678901234");
         ReflectionTestUtils.setField(jwtUtil, "jwtExpiration", 3600000L);
         
         // Setup authentication service
-        AuthServiceImpl authService = new AuthServiceImpl(doctorRepository, officeRepository, jwtUtil);
+        AuthServiceImpl authService = new AuthServiceImpl(doctorRepository, officeRepository, jwtUtil, encoder);
         
         // Create test office
         Office testOffice = new Office();
@@ -92,7 +93,6 @@ public class AuthenticationFlowDemo {
         existingDoctor.setOffice(testOffice);
         
         // Hash the password as it would be stored in the database
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         existingDoctor.setPasswordHash(encoder.encode("mySecurePassword123"));
         
         // Mock doctor repository for login
@@ -143,10 +143,11 @@ public class AuthenticationFlowDemo {
         OfficeRepository officeRepository = Mockito.mock(OfficeRepository.class);
         
         JwtUtil jwtUtil = new JwtUtil();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         ReflectionTestUtils.setField(jwtUtil, "jwtSecret", "myTestSecretKey123456789012345678901234");
         ReflectionTestUtils.setField(jwtUtil, "jwtExpiration", 3600000L);
         
-        AuthServiceImpl authService = new AuthServiceImpl(doctorRepository, officeRepository, jwtUtil);
+        AuthServiceImpl authService = new AuthServiceImpl(doctorRepository, officeRepository, jwtUtil, encoder);
         
         System.out.println("\n=== INVALID LOGIN DEMO ===");
         
@@ -162,7 +163,6 @@ public class AuthenticationFlowDemo {
         // Test 2: Wrong password
         Doctor existingDoctor = new Doctor();
         existingDoctor.setUsername("johndoe");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         existingDoctor.setPasswordHash(encoder.encode("correctPassword"));
         
         when(doctorRepository.findByUsername("johndoe")).thenReturn(Optional.of(existingDoctor));
