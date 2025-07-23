@@ -19,9 +19,8 @@ public class DoctorMapper {
                 doctor.getId(),
                 doctor.getUsername(),
                 doctor.getFullName(),
-
-                doctor.getOffice().getId()
-
+                doctor.getOffice().getId(),
+                null  // Never return password in DTO for security
         );
     }
 }

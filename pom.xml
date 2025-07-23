@@ -58,12 +58,10 @@
             <optional>true</optional>
         </dependency>
         <!-- Activar para cuando estemos implementando autenticación. Por el momento, se remueve para pruebas. -->
-        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
