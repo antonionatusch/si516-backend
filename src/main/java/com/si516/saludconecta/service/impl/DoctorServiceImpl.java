@@ -8,9 +8,9 @@ import com.si516.saludconecta.repository.DoctorRepository;
 import com.si516.saludconecta.repository.OfficeRepository;
 import com.si516.saludconecta.service.DoctorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final OfficeRepository officeRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public List<DoctorDTO> getAll() {
@@ -40,8 +41,13 @@ public class DoctorServiceImpl implements DoctorService {
         Office office = officeRepository.findById(doctorDTO.officeId())
                 .orElseThrow(() -> new RuntimeException("Office not found: " + doctorDTO.officeId()));
 
-
         Doctor doctor = DoctorMapper.toEntity(doctorDTO, office);
+        
+        // Hash password if provided
+        if (doctorDTO.password() != null && !doctorDTO.password().trim().isEmpty()) {
+            doctor.setPasswordHash(passwordEncoder.encode(doctorDTO.password()));
+        }
+        
         Doctor saved = doctorRepository.save(doctor);
         return DoctorMapper.toDTO(saved);
     }
@@ -57,6 +63,11 @@ public class DoctorServiceImpl implements DoctorService {
         existing.setUsername(doctorDTO.username());
         existing.setFullName(doctorDTO.fullName());
         existing.setOffice(office);
+        
+        // Update password if provided
+        if (doctorDTO.password() != null && !doctorDTO.password().trim().isEmpty()) {
+            existing.setPasswordHash(passwordEncoder.encode(doctorDTO.password()));
+        }
 
         Doctor updated = doctorRepository.save(existing);
         return DoctorMapper.toDTO(updated);
