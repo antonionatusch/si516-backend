@@ -96,7 +96,11 @@ El sistema sigue una arquitectura modular basada en:
 ---
 
 ## Demo de Transcripción de Audio
-![](media/transcription-demo.mp4)
+
+
+https://github.com/user-attachments/assets/3519ff84-c027-4ba6-ae52-b52a9860f259
+
+
 
 ---
 
