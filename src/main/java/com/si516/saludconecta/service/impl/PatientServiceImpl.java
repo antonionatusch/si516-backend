@@ -33,6 +33,13 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public PatientDTO getByName(String name) {
+        Patient patient = patientRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Patient not found with name: " + name));
+        return PatientMapper.toDTO(patient);
+    }
+
+    @Override
     public PatientDTO create(PatientDTO patientDTO) {
         Patient toSave = PatientMapper.toEntity(patientDTO);
         Patient saved = patientRepository.save(toSave);

@@ -35,6 +35,14 @@ public class PatientController {
     }
 
     /**
+     * GET /patients/by-name/{name} : obtiene un paciente por nombre
+     */
+    @GetMapping("/by-name/{name}")
+    public PatientDTO getByName(@PathVariable String name) {
+        return patientService.getByName(name);
+    }
+
+    /**
      * POST /patients : crea un paciente.
      * El campo id debe venir null (validado con @Null en el DTO).
      */
