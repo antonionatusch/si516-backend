@@ -36,3 +36,14 @@ GET /patients/by-name/John%20Doe
 - Added GET `/patients/by-name/{name}` endpoint in `PatientController`
 - Follows the same patterns as existing CRUD operations
 - Uses exact name matching (case-sensitive)
+
+## Response Structure
+
+The endpoint returns the same PatientDTO structure as other patient endpoints:
+- `id`: MongoDB document ID (maps to `_id` in database)
+- `name`: Patient's full name
+- `dob`: Date of birth (YYYY-MM-DD format)
+- `email`: Patient's email address
+- `phone`: Patient's phone number (8 digits)
+
+Note: The MongoDB document will also contain the `_class` field for polymorphic type handling by Spring Data MongoDB, but this is filtered out in the DTO response to maintain clean API contracts.
