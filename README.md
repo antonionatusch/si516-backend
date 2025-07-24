@@ -47,7 +47,7 @@ El sistema utiliza un servicio remoto de transcripción basado en **Whisper.cpp*
 4. Extracción de información estructurada en formato JSON mediante un modelo alojado en **LM Studio**.
 5. Exposición de resultados a través de endpoints.
 
-**Nota:** Este servicio es intensivo en recursos y se recomienda ejecutarlo en una máquina separada con capacidades adecuadas. Requiere tener instalado **Whisper.cpp**, **Llama 3.1 8b Instruct** y **LM Studio**. El script que implementa esta funcionalidad se encuentra en el archivo `transcriber_service.py`.
+**Nota:** Este servicio es intensivo en recursos y se recomienda ejecutarlo en una máquina separada con capacidades adecuadas. Requiere tener instalado **Whisper.cpp**, **Llama 3.1 8b Instruct** y **LM Studio**. El script que implementa esta funcionalidad se encuentra en el archivo `[transcriber_service.py]([url](https://github.com/antonionatusch/si516-backend/blob/8980433c7e5305938518bb95b705df5c04eba356/src/python/transcriber_service.py))`.
 
 ### Arquitectura General
 El sistema sigue una arquitectura modular basada en:
