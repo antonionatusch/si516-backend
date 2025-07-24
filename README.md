@@ -96,7 +96,7 @@ El sistema sigue una arquitectura modular basada en:
 ---
 
 ## Demo de Transcripción de Audio
-En esta sección se incluirá un video demostrativo mostrando la funcionalidad del sistema, específicamente el proceso de transcripción de audio y la extracción de información estructurada.
+![](media/transcription-demo.mp4)
 
 ---
 
